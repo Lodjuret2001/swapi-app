@@ -1,17 +1,11 @@
-import { useEffect, useState } from 'react'
+import Background from "./components/Background";
 
 function App() {
-  
-  useEffect({
-
-  }, []);
-
-  
   return (
     <>
-  
+      <Background></Background>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

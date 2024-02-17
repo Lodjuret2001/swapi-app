@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios, { CanceledError } from "axios";
 
 export default axios.create({
-  baseURL: "http://localhost:5173/",
+  baseURL: "http://localhost:3000",
 });
 
-
+export { CanceledError };

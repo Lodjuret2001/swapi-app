@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import configAxios from "../services/axiosConfig.js";
-const axios = configAxios();
+import axios from "../services/axiosConfig.js";
 import Character from "../models/CharacterModel.js";
 
 const CharactersController = {
@@ -32,35 +31,38 @@ const CharactersController = {
     try {
       const character = req.body;
 
-      const swapiCharacter = await axios.get(
-        `/people/?search=${character.name}`
-      );
-      const swapiName = swapiCharacter.data.results[0].name;
+      const swuCharacter = await axios.get(`search?q=name:${character.name}`);
+      const { Name, Subtitle, BackArt, FrontArt } = swuCharacter.data.data[0];
 
-      if (character.name === swapiName) {
-        const existingCharacter = await Character.findOne({ name: swapiName });
+      if (character.name === Name) {
+        const existingCharacter = await Character.findOne({ name: Name });
 
         if (!existingCharacter) {
-          const characters = await Character.find();
+          let characterWithHigestId = await Character.findOne()
+            .sort({ _id: -1 })
+            .limit(1);
+          if (!characterWithHigestId) {
+            characterWithHigestId = { _id: 0 };
+          }
 
           const newCharacter = new Character({
-            _id: characters.length + 1,
-            name: swapiName,
+            _id: characterWithHigestId._id + 1,
+            name: Name,
+            subtitle: Subtitle,
+            imageUrl: BackArt !== undefined ? BackArt : FrontArt,
           });
           const savedCharacter = await newCharacter.save();
           res.send(`${savedCharacter.name} has been added to the collection`);
         } else {
-          return res.send(`${swapiName} already exists in the collection`);
+          return res.send(`${Name} already exists in the collection`);
         }
       }
 
-      //If the provided req.body.name is incomplete (e.g., 'Obi'), the SWAPI database returns the full name ('Obi-Wan-Kenobi'). To ensure accurate comparison, the code includes an "else" statement suggesting the use of the full name from SWAPI.
-      else res.send(`Name input is not valid, maybe you meant ${swapiName}?`);
+      //If the provided req.body.name is incomplete (e.g., 'Obi'), the SWU database returns the full name ('Obi-Wan-Kenobi'). To ensure accurate comparison, the code includes an "else" statement suggesting the use of the full name from SWU.
+      else res.send(`Name input is not valid, maybe you meant ${Name}?`);
     } catch (error) {
       console.error("Error creating character:", error);
-      res
-        .status(400)
-        .send("The character does not exist in the Swapi database.");
+      res.status(400).send("The character does not exist in the SWU database.");
     }
   },
 
@@ -68,15 +70,25 @@ const CharactersController = {
     try {
       const [character1, character2] = req.body;
 
+      if (!Array.isArray(req.body) || req.body.length !== 2) {
+        return res
+          .status(400)
+          .send("Two characters are required for swapping...");
+      }
+
       if (character1._id === character2._id) {
         return res.send("Cannot swap places with the same character...");
       }
 
       await Character.findByIdAndUpdate(character1._id, {
         name: character2.name,
+        subtitle: character2.subtitle,
+        imageUrl: character2.imageUrl,
       });
       await Character.findByIdAndUpdate(character2._id, {
         name: character1.name,
+        subtitle: character1.subtitle,
+        imageUrl: character1.imageUrl,
       });
 
       res.send(
