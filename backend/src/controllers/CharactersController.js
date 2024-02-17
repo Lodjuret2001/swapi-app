@@ -39,8 +39,10 @@ const CharactersController = {
 
       if (character.name === swapiName) {
         const existingCharacter = await Character.findOne({ name: swapiName });
-        const characters = await Character.find();
+
         if (!existingCharacter) {
+          const characters = await Character.find();
+
           const newCharacter = new Character({
             _id: characters.length + 1,
             name: swapiName,
@@ -64,10 +66,18 @@ const CharactersController = {
 
   swapCharacters: async (req, res) => {
     try {
-      const [ character1, character2 ] = req.body;
+      const [character1, character2] = req.body;
 
-      await Character.findByIdAndUpdate(character1._id, { name: character2.name });
-      await Character.findByIdAndUpdate(character2._id, { name: character1.name });
+      if (character1._id === character2._id) {
+        return res.send("Cannot swap places with the same character...");
+      }
+
+      await Character.findByIdAndUpdate(character1._id, {
+        name: character2.name,
+      });
+      await Character.findByIdAndUpdate(character2._id, {
+        name: character1.name,
+      });
 
       res.send(
         `You have swapped places with ${character1.name} and ${character2.name} succesfully!`
@@ -85,9 +95,7 @@ const CharactersController = {
       if (!deletedCharacter) {
         return res.status(404).send("Character not found in the collection...");
       }
-      res.send(
-        `${deletedCharacter.name} was removed from the collection...`
-      );
+      res.send(`${deletedCharacter.name} was removed from the collection...`);
     } catch (error) {
       console.error("Error deleting character:", error);
       res.status(400).send("Error deleting character...");
