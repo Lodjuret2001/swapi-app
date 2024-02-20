@@ -32,6 +32,7 @@ const CharactersController = {
       const character = req.body;
 
       const swuCharacter = await axios.get(`search?q=name:${character.name}`);
+
       const { Name, Subtitle, BackArt, FrontArt } = swuCharacter.data.data[0];
 
       if (character.name === Name) {
@@ -52,14 +53,19 @@ const CharactersController = {
             imageUrl: BackArt !== undefined ? BackArt : FrontArt,
           });
           const savedCharacter = await newCharacter.save();
-          res.send(`${savedCharacter.name} has been added to the collection`);
+          res.send(savedCharacter);
         } else {
-          return res.send(`${Name} already exists in the collection`);
+          return res
+            .status(400)
+            .send(`${Name} already exists in the collection`);
         }
       }
 
       //If the provided req.body.name is incomplete (e.g., 'Obi'), the SWU database returns the full name ('Obi-Wan-Kenobi'). To ensure accurate comparison, the code includes an "else" statement suggesting the use of the full name from SWU.
-      else res.send(`Name input is not valid, maybe you meant ${Name}?`);
+      else
+        res
+          .status(400)
+          .send(`Name input is not valid, maybe you meant ${Name}?`);
     } catch (error) {
       console.error("Error creating character:", error);
       res.status(400).send("The character does not exist in the SWU database.");
