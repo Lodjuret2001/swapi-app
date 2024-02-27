@@ -1,35 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import {
+  Background,
+  LogoContainer,
+  Logo,
+  CollectionButton,
+  MusicPlayer,
+  CharacterForm,
+  CharacterList,
+} from "./components/index";
+import useCharacters from "./hooks/useCharacters";
+import useCharacterManagement from "./hooks/useCharacterManagement";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { error, isLoading } = useCharacters();
+
+  const { characters, addCharacter, deleteCharacter, handleSelection } =
+    useCharacterManagement();
+
+  const [isCharactersVisible, setIsCharactersVisibility] = useState(false);
+
+  const handleListVisibility = () => {
+    setIsCharactersVisibility(!isCharactersVisible);
+  };
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {isLoading && <div style={{ color: "blue" }}>Page is Loading...</div>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <Background />
+      <LogoContainer>
+        <Logo />
+        <CollectionButton onClick={handleListVisibility}>
+          {isCharactersVisible
+            ? "Hide Star Wars Collection"
+            : "Show Star Wars Collection"}
+        </CollectionButton>
+        <MusicPlayer />
+        <CharacterForm addCharacter={addCharacter} />
+      </LogoContainer>
+      {isCharactersVisible && (
+        <CharacterList
+          deleteCharacter={deleteCharacter}
+          handleSelection={handleSelection}
+          characters={characters}
+        />
+      )}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
