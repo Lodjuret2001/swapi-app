@@ -35,6 +35,20 @@ interface Props {
 const CharacterForm = ({ addCharacter }: Props) => {
   const [message, setMessage] = useState("");
   const [messageColor, setMessageColor] = useState("blue");
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<Form>();
+
+  const placeholderTexts = [
+    "Yoda...",
+    "Luke Skywalker...",
+    "Darth Vader...",
+    "Boba Fett...",
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -44,19 +58,6 @@ const CharacterForm = ({ addCharacter }: Props) => {
     return () => clearInterval(interval);
   }, [message]);
 
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm<Form>();
-
-  const [placeholderIndex, setPlaceholderIndex] = useState(0);
-  const placeholderTexts = [
-    "Yoda...",
-    "Luke Skywalker...",
-    "Darth Vader...",
-    "Boba Fett...",
-  ];
   useEffect(() => {
     const interval = setInterval(() => {
       setPlaceholderIndex((prevIndex) =>
