@@ -85,7 +85,7 @@ const CharacterForm = ({ addCharacter }: Props) => {
   };
 
   return (
-    <div className="mb-3">
+    <div className="mb-3 mt-2">
       <div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Input

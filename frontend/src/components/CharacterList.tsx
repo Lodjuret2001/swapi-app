@@ -33,9 +33,15 @@ const Button = styled.button<{ $delete?: boolean }>`
 
 interface Props {
   characters: Character[];
+  deleteCharacter: (character: Character) => void;
+  handleSelection: (character: Character) => void;
 }
 
-const CharacterList = ({ characters }: Props) => {
+const CharacterList = ({
+  characters,
+  deleteCharacter,
+  handleSelection,
+}: Props) => {
   return (
     <div className="flex justify-center mt-6 mb-5">
       <div className="grid grid-cols-3 w-3/5 bg-yellow gap-3 rounded-md">
@@ -56,8 +62,10 @@ const CharacterList = ({ characters }: Props) => {
               </p>
             </div>
             <div className="w-full mt-3 mb-3 flex items-center justify-evenly">
-              <Button>Swap</Button>
-              <Button $delete>Delete</Button>
+              <Button onClick={() => handleSelection(character)}>Swap</Button>
+              <Button $delete onClick={() => deleteCharacter(character)}>
+                Delete
+              </Button>
             </div>
           </Card>
         ))}

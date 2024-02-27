@@ -11,7 +11,7 @@ const CharactersController = {
       res.send(characters);
     } catch (error) {
       console.error("Error retrivning characters:", error);
-      res.status(500).send("Error retrivning characters:");
+      res.status(500).send("Error retrivning characters...");
     }
   },
 
@@ -23,7 +23,7 @@ const CharactersController = {
       res.send(character);
     } catch (error) {
       console.error("Error retrivning character:", error);
-      res.status(500).send("Error retrivning character:");
+      res.status(500).send("Error retrivning character...");
     }
   },
 
@@ -111,7 +111,7 @@ const CharactersController = {
       const deletedCharacter = await Character.findByIdAndDelete(req.params.id);
 
       if (!deletedCharacter) {
-        return res.status(404).send("Character not found in the collection...");
+        return res.status(400).send("Character not found in the collection...");
       }
       res.send(`${deletedCharacter.name} was removed from the collection...`);
     } catch (error) {

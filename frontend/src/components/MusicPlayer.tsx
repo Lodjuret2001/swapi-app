@@ -14,6 +14,7 @@ const Select = styled.select`
   border: solid 2px yellow;
   border-radius: 2px;
   outline: none;
+  margin-right: 12px;
 `;
 
 const Option = styled.option`
@@ -66,7 +67,7 @@ const MusicPlayer = () => {
   };
   return (
     <>
-      <div className="flex justify-between items-center w-4/5 mt-3 mb-3">
+      <div className="flex justify-between items-center w-4/4 mt-3 mb-3">
         <Select value={selectedSound} onChange={handleSoundChange}>
           {sounds.map((sound, index) => (
             <Option value={index} key={index}>

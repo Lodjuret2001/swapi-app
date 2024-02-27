@@ -1,4 +1,5 @@
 import apiClient from "./api-client";
+import { Character } from "./character-service";
 
 interface Data {
   name: string;
@@ -27,8 +28,8 @@ class HttpService {
     return apiClient.post<T>(this.endpoint, data);
   }
 
-  swap<T>() {
-    return apiClient.put<T[]>(this.endpoint);
+  swap<T>(selectedCharacters: Character[]) {
+    return apiClient.put<T[]>(this.endpoint, selectedCharacters);
   }
 
   delete<T>(id: number) {
