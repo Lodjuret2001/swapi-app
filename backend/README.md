@@ -1,102 +1,42 @@
-# SWAPI PROJECT
+# Star Wars API Backend
 
-## About
+This backend server provides a RESTful API for managing Star Wars characters. It is built using Express.js and MongoDB, allowing users to perform CRUD operations on character data.
 
-The SWAPI PROJECT is a simple Node.js application that allows you to manage a collection of Star Wars characters. You can add, retrieve, update, and delete characters from your collection using HTTP requests.
+## Project Structure
 
-## Prerequisites
+The project structure is organized as follows:
 
-Before you get started, ensure you have the following dependencies installed:
+- **controllers**: Contains controller functions for handling HTTP requests and business logic.
+- **models**: Defines MongoDB schemas for character data.
+- **routes**: Defines API routes and maps them to corresponding controller functions.
+- **services**: Contains configuration for external services, such as Axios for making HTTP requests.
 
-- **Node.js**: [Download and Install Node.js](https://nodejs.org/)
-- **Express**: Install using npm (Node Package Manager) by running `npm install express`
-- **Axios**: Install using npm by running `npm install axios`
+## Endpoints
 
-## Installation
+- **GET /characters**: Retrieve all characters from the database.
+- **GET /characters/:id**: Retrieve a specific character by ID.
+- **POST /characters**: Create a new character.
+- **PUT /characters**: Swap places between two characters.
+- **DELETE /characters/:id**: Delete a character by ID.
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Lodjuret2001/swapi
+## Database Connection
 
-2. **Navigate to the project directory:**
+This backend server is designed to connect to a MongoDB database. To set up the database connection:
 
-    ```bash
-    cd your-repo
-    ```
+1. Ensure MongoDB is installed and running on your system.
+2. Update the MongoDB connection URL in `app.js` to point to your database. The default URL is `"mongodb://localhost:27017/swapi-app"`, but this may vary depending on your database configuration.
 
-3. **Install project dependencies:**
+## Running the Server
 
-    ```bash
-    npm install
-    ```
+By default, the server runs on PORT 3000. To start the server, navigate to the `backend/src` directory and run:
 
-## Running the API
-
-The API will be accessible at http://localhost:3000.
-
-To run the API, use the following command: 'node index.js'
-
-# API Endpoints
-
-## GET Routes
-
-- **Description:** Home page
-- **Endpoint:** `/`
-- **Example:** [http://localhost:3000/](http://localhost:3000/)
-
-- **Description:** Retrieve character data
-- **Endpoint:** `/collection`
-- **Example:** [http://localhost:3000/collection](http://localhost:3000/collection)
-
-- **Description:** Retrieve a character by ID
-- **Endpoint:** `/collection/:id`
-- **Example:** [http://localhost:3000/collection/1](http://localhost:3000/collection/1)
-
-## POST Route
-
-- **Description:** Add a character to the collection from SWAPI Database.
-- **Endpoint:** [http://localhost:3000/add-character](http://localhost:3000/add-character)
-
-  **Request Body:**
-  ```json
-  {
-    "name": "Character Name"
-  }
-
-## PUT Route
-
-- **Description:** Swap the positions of two characters in the collection.
-- **Endpoint:** [http://localhost:3000/swap-characters](http://localhost:3000/swap-characters)
-
-  **Request Body:**
-  ```json
-  {
-    "characters": [
-      {
-        "name": "Character Name 1"
-      },
-      {
-        "name": "Character Name 2"
-      }
-    ]
-  }
-
-
-## DELETE Route
-
-- **Description:** Remove an item by ID
-- **Endpoint:** `/collection/:id`
-- **Example:** [http://localhost:3000/collection/1](http://localhost:3000/collection/1)
-
-## Contributing
-
-Feel free to contribute to this project by opening issues or pull requests. Your contributions are welcome!
+```bash
+node app.js
+```
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## Acknowledgments
-
-- Thanks to the Star Wars universe for providing awesome characters!
+---
 
